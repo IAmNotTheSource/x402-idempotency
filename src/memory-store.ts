@@ -7,9 +7,10 @@ export interface MemoryStoreOptions {
 }
 
 /**
- * Single-process store. Correct for one replica; for more than one, implement
- * {@link IdempotencyStore} over Redis (SET NX PX), Postgres (INSERT ... ON CONFLICT),
- * SQLite, or a KV namespace. `reserve` must be create-if-absent.
+ * Single-process store. Correct for one replica; for more than one, use
+ * `RedisStore` (`x402-idempotency/redis`) or implement {@link IdempotencyStore}
+ * over Postgres (INSERT ... ON CONFLICT), SQLite, or a KV namespace. `reserve`
+ * must be create-if-absent.
  */
 export class MemoryStore implements IdempotencyStore {
   private readonly map = new Map<string, IdempotencyEntry>();

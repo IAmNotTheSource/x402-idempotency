@@ -3,6 +3,12 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 10
     strategy:
       matrix:
         node: [20, 22]
@@ -13,3 +19,6 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: cd e2e && npm install && node --test core.e2e.test.mjs
+      - run: cd e2e && node --test redis.e2e.test.mjs
+        env:
+          REDIS_URL: redis://127.0.0.1:6379

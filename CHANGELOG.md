@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+
+- `RedisStore` at `x402-idempotency/redis` — multi-replica store (`SET NX PX` reserve, server-side expiry) with `fromNodeRedis` / `fromIoredis` adapters. No new dependencies; the client is passed in.
+
 ## 0.1.0
 
 - `createIdempotency()` — `payment-identifier` extension for `@x402/core` resource servers (before/after verify, before/after settle, settle failure, cancel; receipt annotation).
