@@ -1,0 +1,56 @@
+{
+  "name": "x402-idempotency",
+  "version": "0.1.0",
+  "description": "Spec-faithful idempotency for x402 resource servers: charge once, deliver once, replay safely. Implements the payment-identifier extension with pluggable stores.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./http": {
+      "types": "./dist/http.d.ts",
+      "import": "./dist/http.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js"
+    }
+  },
+  "files": [
+    "dist",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test \"test/*.test.mjs\"",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "x402",
+    "idempotency",
+    "payment-identifier",
+    "micropayments",
+    "agents",
+    "http-402",
+    "stablecoin",
+    "replay-protection"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IAmNotTheSource/x402-idempotency"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "typescript": "^5.6.0"
+  }
+}
