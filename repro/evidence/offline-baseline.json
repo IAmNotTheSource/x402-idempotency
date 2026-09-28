@@ -1,0 +1,81 @@
+{
+  "label": "offline-baseline",
+  "server": "http://127.0.0.1:4422",
+  "payer": "0x0DA2b6eDA8Ca6800170053c22CB27Dd84839FEa2",
+  "cases": {
+    "A_lost_response_then_retry": {
+      "paymentId": "pay_5f99b5df169d4440aa9c7c58cafacb96",
+      "firstAttempt": "client saw: UND_ERR_SOCKET",
+      "settlementsAfterFirst": [
+        {
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000001",
+          "success": true,
+          "errorReason": null,
+          "payer": "0x0DA2b6eDA8Ca6800170053c22CB27Dd84839FEa2"
+        }
+      ],
+      "retry": {
+        "status": 200,
+        "body": {
+          "report": "btc",
+          "handlerCall": 2
+        },
+        "receipt": {
+          "success": true,
+          "payer": "0x0DA2b6eDA8Ca6800170053c22CB27Dd84839FEa2",
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000002",
+          "network": "eip155:84532"
+        },
+        "paymentRequiredError": null
+      },
+      "settlementsAfterRetry": [
+        {
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000001",
+          "success": true,
+          "errorReason": null,
+          "payer": "0x0DA2b6eDA8Ca6800170053c22CB27Dd84839FEa2"
+        },
+        {
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000002",
+          "success": true,
+          "errorReason": null,
+          "payer": "0x0DA2b6eDA8Ca6800170053c22CB27Dd84839FEa2"
+        }
+      ],
+      "facilitatorCallsDelta": {
+        "verify": 1,
+        "settle": 1
+      }
+    },
+    "B_identical_resend": {
+      "paymentId": "pay_94a3a1d31cba4275b81dd7cfc4db02ff",
+      "first": {
+        "status": 200,
+        "body": {
+          "report": "btc",
+          "handlerCall": 3
+        },
+        "receipt": {
+          "success": true,
+          "payer": "0x0DA2b6eDA8Ca6800170053c22CB27Dd84839FEa2",
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000003",
+          "network": "eip155:84532"
+        },
+        "paymentRequiredError": null
+      },
+      "resend": {
+        "status": 402,
+        "body": {},
+        "receipt": null,
+        "paymentRequiredError": {
+          "error": "invalid_exact_evm_payload_authorization_already_used",
+          "errorMessage": null
+        }
+      },
+      "facilitatorCallsDelta": {
+        "verify": 1,
+        "settle": 0
+      }
+    }
+  }
+}

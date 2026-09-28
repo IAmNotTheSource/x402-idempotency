@@ -1,0 +1,161 @@
+{
+  "label": "offline-fixed",
+  "server": "http://127.0.0.1:4423",
+  "payer": "0xB3D8388178c09B7aAc0c60785aADf7582ABAE8DD",
+  "cases": {
+    "A_lost_response_then_retry": {
+      "paymentId": "pay_a6e31283200f46d5a693fb76e46d1b00",
+      "firstAttempt": "client saw: UND_ERR_SOCKET",
+      "settlementsAfterFirst": [
+        {
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000001",
+          "success": true,
+          "errorReason": null,
+          "payer": "0xB3D8388178c09B7aAc0c60785aADf7582ABAE8DD"
+        }
+      ],
+      "retry": {
+        "status": 200,
+        "body": {
+          "report": "btc",
+          "handlerCall": 1
+        },
+        "receipt": {
+          "success": true,
+          "payer": "0xB3D8388178c09B7aAc0c60785aADf7582ABAE8DD",
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000001",
+          "network": "eip155:84532",
+          "extensions": {
+            "payment-identifier": {
+              "info": {
+                "required": false,
+                "id": "pay_a6e31283200f46d5a693fb76e46d1b00",
+                "replayed": true
+              },
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 16,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9_-]+$"
+                  }
+                },
+                "required": [
+                  "required"
+                ]
+              }
+            }
+          }
+        },
+        "paymentRequiredError": null
+      },
+      "settlementsAfterRetry": [
+        {
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000001",
+          "success": true,
+          "errorReason": null,
+          "payer": "0xB3D8388178c09B7aAc0c60785aADf7582ABAE8DD"
+        }
+      ],
+      "facilitatorCallsDelta": {
+        "verify": 0,
+        "settle": 0
+      }
+    },
+    "B_identical_resend": {
+      "paymentId": "pay_c216f8d2dbfc4ca1bdc1375d0bff5a7f",
+      "first": {
+        "status": 200,
+        "body": {
+          "report": "btc",
+          "handlerCall": 2
+        },
+        "receipt": {
+          "success": true,
+          "payer": "0xB3D8388178c09B7aAc0c60785aADf7582ABAE8DD",
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000002",
+          "network": "eip155:84532",
+          "extensions": {
+            "payment-identifier": {
+              "info": {
+                "required": false,
+                "id": "pay_c216f8d2dbfc4ca1bdc1375d0bff5a7f",
+                "replayed": false
+              },
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 16,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9_-]+$"
+                  }
+                },
+                "required": [
+                  "required"
+                ]
+              }
+            }
+          }
+        },
+        "paymentRequiredError": null
+      },
+      "resend": {
+        "status": 200,
+        "body": {
+          "report": "btc",
+          "handlerCall": 2
+        },
+        "receipt": {
+          "success": true,
+          "payer": "0xB3D8388178c09B7aAc0c60785aADf7582ABAE8DD",
+          "transaction": "0xfake00000000000000000000000000000000000000000000000000000000002",
+          "network": "eip155:84532",
+          "extensions": {
+            "payment-identifier": {
+              "info": {
+                "required": false,
+                "id": "pay_c216f8d2dbfc4ca1bdc1375d0bff5a7f",
+                "replayed": true
+              },
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 16,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9_-]+$"
+                  }
+                },
+                "required": [
+                  "required"
+                ]
+              }
+            }
+          }
+        },
+        "paymentRequiredError": null
+      },
+      "facilitatorCallsDelta": {
+        "verify": 0,
+        "settle": 0
+      }
+    }
+  }
+}

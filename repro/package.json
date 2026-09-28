@@ -1,0 +1,14 @@
+{
+  "name": "x402-idempotency-repro",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@x402/core": "^2.27.0",
+    "@x402/evm": "^2.27.0",
+    "@x402/express": "^2.27.0",
+    "@x402/fetch": "^2.27.0",
+    "express": "^4.22.3",
+    "viem": "^2.21.0",
+    "x402-idempotency": "file:.."
+  }
+}
