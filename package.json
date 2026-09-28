@@ -1,6 +1,6 @@
 {
   "name": "x402-idempotency",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Spec-faithful idempotency for x402 resource servers: charge once, deliver once, replay safely. Implements the payment-identifier extension with pluggable stores.",
   "license": "MIT",
   "type": "module",
@@ -18,6 +18,10 @@
     "./node": {
       "types": "./dist/node.d.ts",
       "import": "./dist/node.js"
+    },
+    "./redis": {
+      "types": "./dist/redis.d.ts",
+      "import": "./dist/redis.js"
     }
   },
   "files": [
@@ -29,7 +33,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && node --test \"test/*.test.mjs\"",
+    "test": "npm run build && node --test test/*.test.mjs",
     "prepublishOnly": "npm test"
   },
   "keywords": [
@@ -40,7 +44,8 @@
     "agents",
     "http-402",
     "stablecoin",
-    "replay-protection"
+    "replay-protection",
+    "redis"
   ],
   "repository": {
     "type": "git",

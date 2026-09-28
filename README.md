@@ -28,7 +28,7 @@ The spec answers all three with the `payment-identifier` extension: a client-cho
 import { createIdempotency, PAYMENT_IDENTIFIER } from "x402-idempotency";
 import { x402ResourceServer, x402HTTPResourceServer, paymentMiddlewareFromHTTPServer } from "@x402/express";
 
-const idem = createIdempotency({ /* store: new RedisStore(...) */ });
+const idem = createIdempotency({ /* store: new RedisStore(...) — see Stores */ });
 
 const routes = {
   "POST /reports": {
@@ -125,6 +125,23 @@ interface IdempotencyStore {
 }
 ```
 
+### Redis (more than one replica)
+
+```ts
+import { createClient } from "redis";
+import { createIdempotency } from "x402-idempotency";
+import { RedisStore, fromNodeRedis } from "x402-idempotency/redis";
+
+const redis = createClient({ url: process.env.REDIS_URL });
+await redis.connect();
+
+const idem = createIdempotency({ store: new RedisStore({ client: fromNodeRedis(redis) }) });
+```
+
+Bring your own client: `fromNodeRedis` (`redis` v4+) or `fromIoredis` (`ioredis`). Neither is a dependency of this package. For anything else (Upstash, Valkey clients, ...) pass an object with four functions, `get`, `setIfAbsent`, `set`, `del`.
+
+`reserve` is one `SET NX PX`, so exactly one replica wins an id, and Redis expires the entry when the binding does. If Redis is unreachable or an entry is unreadable the request fails; it is never treated as new. `keyPrefix` namespaces keys on a shared instance.
+
 Entries are small JSON (settle receipt + captured response ≤ `maxStoredBodyBytes`, default 1 MiB). TTL defaults to 24 h. Keys look like `x402idem:v1:<scope>:<payer>:<source>:<id>`; add tenant/merchant boundaries with `scope`.
 
 ## Options
@@ -147,7 +164,8 @@ Entries are small JSON (settle receipt + captured response ≤ `maxStoredBodyByt
 
 - Mode 1 replays JSON and HTML bodies through the core's `skipHandler`; other content types re-run the handler (still without settling). Use a wrapper for exact replay of binary/text.
 - `upfront` / `escrow` flows: a pre-handler settle is recorded as `settled_pending`; mode 1 completes it on the after-handler settle. Wrappers see the final response and handle all flows uniformly.
-- `MemoryStore` is single-replica. Redis/Postgres adapters welcome — see `CONTRIBUTING.md`.
+- `MemoryStore` is single-replica; use `RedisStore` for more. Postgres/SQLite/KV adapters welcome — see `CONTRIBUTING.md`.
+- `RedisStore` assumes writes are not lost: on failover with asynchronous replication, a reservation acknowledged by the old primary can be missing on the new one.
 - Facilitator-side idempotency (`/verify`, `/settle` retries, [x402#452](https://github.com/x402-foundation/x402/issues/452)) is a separate layer; the `IdempotencyEngine` here is reusable for it.
 
 ## Semantics in one page
